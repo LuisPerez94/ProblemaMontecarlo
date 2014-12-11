@@ -11,6 +11,9 @@ import java.awt.*;
 public class MiPanel extends JPanel {
     private JButton simular;
     private JButton info;
+    private JComboBox clientes;
+    private JComboBox porcentaje;
+    private JComboBox corridas;
     
     public MiPanel(){
         addComponentes();
@@ -40,19 +43,60 @@ public class MiPanel extends JPanel {
         textoProblema.setWrapStyleWord(true);
         textoProblema.setLineWrap(true);
         
+        String[] strClientes = {"100", "300", "500", "800", "1000",
+                                "1200", "1500", "1800", "2000"};
+        clientes = new JComboBox(strClientes);
+        clientes.setSelectedIndex(1);
+        
+        String[] strPorcentaje = {"1", "5", "10"};
+        porcentaje = new JComboBox(strPorcentaje);
+        porcentaje.setSelectedIndex(1);
+        
+        String[] strCorridas = {"2","3","4","5","6","7","8","9","10"};
+        corridas = new JComboBox(strCorridas);
+        corridas.setSelectedIndex(3);
+        
         JPanel centro = new JPanel();
         JPanel sur = new JPanel();
+        JPanel surCombos = new JPanel();
         JPanel surBoton = new JPanel();
         JPanel surInfo = new JPanel();
         
+        JPanel grid1 = new JPanel();
+        JPanel grid2 = new JPanel();
+        JPanel grid3 = new JPanel();
+        
+        surCombos.setBorder(BorderFactory.createLineBorder(this.getBackground(), 5));
+        Font arial = new Font("Arial", Font.PLAIN, 12);
+        JLabel lab1 = new JLabel("Cantidad de clientes a atender:");
+        lab1.setFont(arial);
+        clientes.setFont(arial);
+        JLabel lab2 = new JLabel("Porcentaje de error (Para los IC): ");
+        lab2.setFont(arial);
+        porcentaje.setFont(arial);
+        JLabel lab3 = new JLabel("Cantidad de corridas: ");
+        lab3.setFont(arial);
+        corridas.setFont(arial);
+        
         centro.add(textoProblema);
         sur.setLayout(new BorderLayout());
+        grid1.add(lab1);
+        grid2.add(lab2);
+        grid3.add(lab3);
+        grid1.add(clientes);
+        grid2.add(porcentaje);
+        grid3.add(corridas);
+        surCombos.add(grid1);
+        surCombos.add(grid2);
+        surCombos.add(grid3);
         surBoton.add(simular);
         surInfo.add(info);
+//        sur.add(surCombos, "North");
         sur.add(surBoton, "Center");
         sur.add(surInfo, "East");
         
-        this.add(centro, "Center");
+        this.add(centro, "North");
+        this.add(surCombos, "Center");
         this.add(sur, "South");
     }
     
@@ -67,6 +111,18 @@ public class MiPanel extends JPanel {
 
     public JButton getInfo() {
         return info;
+    }
+
+    public JComboBox getClientes() {
+        return clientes;
+    }
+
+    public JComboBox getPorcentaje() {
+        return porcentaje;
+    }
+
+    public JComboBox getCorridas() {
+        return corridas;
     }
     
 }

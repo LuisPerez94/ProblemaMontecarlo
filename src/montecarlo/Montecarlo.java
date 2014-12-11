@@ -19,10 +19,10 @@ public class Montecarlo {
     
     public static void dibujarVentana(){
         JFrame f = new JFrame("Problema de Montecarlo");
-        f.setSize(570, 220);
+        f.setSize(570, 300);
         f.setLocationRelativeTo(null);
         f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        f.setResizable(false);
+//        f.setResizable(false);
         
         MiPanel p = new MiPanel();
         MiOyente o = new MiOyente(p);

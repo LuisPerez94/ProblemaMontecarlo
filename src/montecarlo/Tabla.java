@@ -10,15 +10,19 @@ import javax.swing.*;
  * Created on 7/12/2014, 12:56:05 PM
  */
 public final class Tabla extends JFrame {
-    private final int totalClientes = 2000;
-    private final int corridas = 5;
+    private final int totalClientes;
+    private final int corridas;
+    private final int porcentaje;
+    private double promedioClientes = 0;
     private ArrayList<Double> intA;
     private ArrayList<Double> intB;
     private ArrayList<Double> intC;
-    private int porcentaje = 95;
-    private double promedioClientes = 0;
 
-    public Tabla() {
+    public Tabla(int clientes, int porcentaje, int corridas) {
+        totalClientes = clientes;
+        this.porcentaje = porcentaje;
+        this.corridas = corridas;
+        
         this.setSize(850, 400);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -224,11 +228,11 @@ public final class Tabla extends JFrame {
         for(int i = 0; i < 3; i++){
             media = generarMedia(incisos[i]);
             desviacion = generarDesviacion(incisos[i], media);
-            limi = generarLimI(incisos[i], media, desviacion);
-            lims = generarLimS(incisos[i], media, desviacion);
+            limi = generarLimit(incisos[i], media, desviacion, 0);
+            lims = generarLimit(incisos[i], media, desviacion, 1);
             
             respuesta += "\n" + casos[i] + "\n\tIntervalo de confianza: {" + df.format(limi) + ", " + 
-                            df.format(lims) + "} = " + porcentaje + "%\n";
+                            df.format(lims) + "} = " + (100-porcentaje) + "%\n";
         }
         
         JTextArea et = new JTextArea();
@@ -269,17 +273,56 @@ public final class Tabla extends JFrame {
         return desviacion;
     }
     
-    public double generarLimI(ArrayList<Double> inciso, double media, double desviacion){
-        double limi = media - ((desviacion / Math.sqrt(inciso.size())) * 2.776);
+    public double generarLimit(ArrayList<Double> inciso, double media, double desviacion, int tipoLim){
+//        1% es 4.604, 5% 2.776, 7% ni idea, 10% es 2.132
+        double t = 0;
+        double limit;
+        // i es igual a corridas -1, sin embargo, la matriz comienza a contar en 0
+        // así que la igualamos a corridas - 2 para compensarlo
+        int i = corridas-2, j = 0;
         
-        return limi;
+        switch(porcentaje){
+            case 1:
+                j = 0;
+                break;
+                
+            case 5:
+                j = 1;
+                break;
+                
+            case 10:
+                j = 2;
+                break;
+        }
+        
+        double[][] tStudent = {
+                        //     1%      5%      10%
+                            {63.657, 12.706,  6.314},
+                            { 9.925,  4.303,  2.920},
+                            { 5.841,  3.182,  2.353},
+                            { 4.604,  2.776,  2.132},
+                            { 4.032,  2.571,  2.052},
+                            { 3.707,  2.447,  1.943},
+                            { 3.499,  2.365,  1.895},
+                            { 3.355,  2.306,  1.860},
+                            { 3.250,  2.262,  1.833},
+                            { 3.169,  2.228,  1.812}
+                            };
+        
+        t = tStudent[i][j];
+//        System.out.println("t de student: " + t);
+        
+        // Si tipoLim == 0 se trata del límite inferior
+        // Si tipoLim == 1 se trata del límite superior
+        if(tipoLim == 0){
+            limit = media - ((desviacion / Math.sqrt(inciso.size())) * t);
+        
+        }else{
+            limit = media + ((desviacion / Math.sqrt(inciso.size())) * t);
+        }
+        return limit;
     }
     
-    public double generarLimS(ArrayList<Double> inciso, double media, double desviacion){
-        double lims = media + ((desviacion / Math.sqrt(inciso.size())) * 2.776);
-        
-        return lims;
-    }
 
     public final void addEventos(MiOyente oyente) {
         this.addWindowListener(oyente);

@@ -55,13 +55,17 @@ public class MiOyente extends WindowAdapter implements ActionListener{
             
             if(opcion == JOptionPane.OK_OPTION){
                 tabla.dispose();
-                tabla = new Tabla();
+                tabla = new Tabla(Integer.parseInt(p.getClientes().getSelectedItem()+""), 
+                                    Integer.parseInt(p.getPorcentaje().getSelectedItem()+""),
+                                        Integer.parseInt(p.getCorridas().getSelectedItem()+""));
                 tabla.addEventos(this);
                 hayTabla = true;
             }
             
         }else{
-            tabla = new Tabla();
+            tabla = new Tabla(Integer.parseInt(p.getClientes().getSelectedItem()+""), 
+                                Integer.parseInt(p.getPorcentaje().getSelectedItem()+""),
+                                    Integer.parseInt(p.getCorridas().getSelectedItem()+""));
             tabla.addEventos(this);
             hayTabla = true;
         }
@@ -73,8 +77,8 @@ public class MiOyente extends WindowAdapter implements ActionListener{
                 + "\n\n º Chávez San Germán Gerardo"
                 + "\n\n º Ordoñez Ruiz Edgar"
                 + "\n\n º Ponce Rogel Rosa Carmina"
-                + "\n\n º Romero Jonathan"
-                + "\n\n v.1.0.0", 
+                + "\n\n º Romero Velázques Jonathan"
+                + "\n\n v.1.1.0", 
                 "Problema de Montecarlo", JOptionPane.INFORMATION_MESSAGE);
     }
 }
